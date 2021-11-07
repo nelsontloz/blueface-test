@@ -1,0 +1,23 @@
+<div>
+  <h1>{{ title }}</h1>
+  <div *ngIf="profileState.status === 'loaded'">
+    <div>
+      <p>Username: {{ profileState.profile?.username }}</p>
+      <p>email: {{ profileState.profile?.email }}</p>
+    </div>
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+      <div>
+        <label>First Name:</label>
+        <input type="text" formControlName="firstName" />
+      </div>
+      <div>
+        <label>Last Name:</label>
+        <input type="text" formControlName="lastName" />
+      </div>
+      <input type="button" value="Save" type="submit" />
+    </form>
+  </div>
+  <p *ngIf="profileState.status === 'loading'">Loading profile...</p>
+  <p *ngIf="profileState.status === 'saving'">Saving profile...</p>
+  <app-error-message></app-error-message>
+</div>
