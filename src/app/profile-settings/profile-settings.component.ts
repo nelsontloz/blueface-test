@@ -17,7 +17,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   public title = 'Profile';
   public profileState: IProfileState;
   public $profile: Observable<IProfileState>;
-  private subscriptions: Subscription[];
+  private subscriptions: Subscription[] = [];
 
   profileForm = this.formBuilder.group({
     firstName: ['', Validators.required],
@@ -35,9 +35,18 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
     this.store.dispatch(profileLoad());
     const profileSub = this.$profile.subscribe((state) => {
       this.profileState = state;
-      this.profileForm.reset();
-      this.profileForm.controls['firstName'].setValue(state.profile?.firstName);
-      this.profileForm.controls['lastName'].setValue(state.profile?.lastName);
+
+      if (state.status !== 'loaded') {
+        this.profileForm.disable();
+      } else {
+        this.profileForm.reset();
+        this.profileForm.controls['firstName'].setValue(
+          state.profile?.firstName
+        );
+        this.profileForm.controls['lastName'].setValue(state.profile?.lastName);
+
+        this.profileForm.enable();
+      }
     });
 
     this.subscriptions.push(profileSub);

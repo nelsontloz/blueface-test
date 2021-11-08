@@ -1,6 +1,6 @@
 <div>
   <h1>{{ title }}</h1>
-  <div *ngIf="profileState.status === 'loaded'">
+  <div>
     <div>
       <p>Username: {{ profileState.profile?.username }}</p>
       <p>email: {{ profileState.profile?.email }}</p>
@@ -14,7 +14,12 @@
         <label>Last Name:</label>
         <input type="text" formControlName="lastName" />
       </div>
-      <input type="button" value="Save" type="submit" />
+      <button
+        type="submit"
+        [disabled]="profileForm.disabled || profileForm.invalid"
+      >
+        Save
+      </button>
     </form>
   </div>
   <p *ngIf="profileState.status === 'loading'">Loading profile...</p>

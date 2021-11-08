@@ -62,7 +62,7 @@ export class ProfileService {
           };
           resolve(this.user);
         } else {
-          reject({ error: 'Invalid email' });
+          reject({ error: 'Error on email generation' });
         }
       }, Math.random() * 5000);
     });
