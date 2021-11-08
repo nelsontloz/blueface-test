@@ -31,7 +31,7 @@ export class ProfileService {
         } else {
           reject({ error: 'Profile not found' });
         }
-      }, Math.random() * 100);
+      }, Math.random() * 5000);
     });
   }
 
@@ -48,7 +48,7 @@ export class ProfileService {
         } else {
           reject({ error: 'Invalid name' });
         }
-      }, Math.random() * 100);
+      }, Math.random() * 5000);
     });
   }
 
@@ -64,7 +64,7 @@ export class ProfileService {
         } else {
           reject({ error: 'Invalid email' });
         }
-      }, Math.random() * 100);
+      }, Math.random() * 5000);
     });
   }
 }

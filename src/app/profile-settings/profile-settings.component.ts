@@ -17,6 +17,7 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
   public title = 'Profile';
   public profileState: IProfileState;
   public $profile: Observable<IProfileState>;
+  private subscriptions: Subscription[];
 
   profileForm = this.formBuilder.group({
     firstName: ['', Validators.required],
@@ -32,14 +33,16 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(profileLoad());
-    this.$profile.subscribe((state) => {
+    const profileSub = this.$profile.subscribe((state) => {
       this.profileState = state;
       this.profileForm.reset();
       this.profileForm.controls['firstName'].setValue(state.profile?.firstName);
       this.profileForm.controls['lastName'].setValue(state.profile?.lastName);
     });
 
-    this.profileForm.valueChanges
+    this.subscriptions.push(profileSub);
+
+    const formChangeSub = this.profileForm.valueChanges
       .pipe(
         map(() => this.profileForm.pristine),
         filter((pristine) => !pristine)
@@ -47,9 +50,15 @@ export class ProfileSettingsComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.store.dispatch(profileClearErrorMessage());
       });
+
+    this.subscriptions.push(formChangeSub);
   }
 
-  ngOnDestroy() {}
+  ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
 
   async onSubmit() {
     this.store.dispatch(profileClearErrorMessage());
